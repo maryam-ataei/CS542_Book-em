@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Movie and Cinema</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common_forms.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        // Function to update timings and dates based on the selected cinema
+        function updateTimings() {
+            const cinemaName = document.getElementById('cinema').value;
+            $.ajax({
+                url: "{{ url_for('fetch_timings') }}",
+                type: "GET",
+                data: { cinema_name: cinemaName },
+                success: function(data) {
+                    console.log("Data received:", data); // Check the received data structure
+                    let timingSelect = document.getElementById('timing');
+                    let dateSelect = document.getElementById('date');
+                    timingSelect.innerHTML = '';
+                    dateSelect.innerHTML = '';
+        
+                    if (!data.timings || data.timings.length === 0) {
+                        console.log("No timings data found.");
+                        return;
+                    }
+        
+                    let datesAdded = {};
+                    data.timings.forEach(function(timing) {
+                        if (!datesAdded[timing.date_label]) {
+                            let dateOption = new Option(timing.date_label, timing.date_id);
+                            dateSelect.add(dateOption);
+                            datesAdded[timing.date_label] = true;
+                        }
+                    });
+        
+                    window.currentTimings = data.timings; // Store timings for access during date changes
+        
+                    // Automatically update timings for the first available date
+                    if (dateSelect.options.length > 0) {
+                        dateSelect.dispatchEvent(new Event('change')); // Force a change event to load timings
+                    }
+                },
+                error: function(error) {
+                    console.error("Error fetching timings:", error);
+                }
+            });
+        }
+        
+        // Function to filter timings by the selected date
+        function filterTimings(timings, selectedDate) {
+            console.log("Selected Date for Filtering:", selectedDate); // Verify the selected date
+            let timingSelect = document.getElementById('timing');
+            timingSelect.innerHTML = '';  // Clear existing options
+            
+            // Filter and add timings for the selected date
+            timings.forEach(function(timing) {
+                if (timing.date_id === selectedDate) { // Ensure comparison is made with date_id, not date_label
+                    let option = new Option(timing.time_label, timing.time_id);
+                    timingSelect.add(option);
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('cinema').addEventListener('change', updateTimings);
+            document.getElementById('date').addEventListener('change', function() {
+                filterTimings(window.currentTimings, this.value); // Filter based on the selected date ID
+            });
+    
+            // Load initial data
+            if (document.getElementById('cinema').options.length > 0) {
+                updateTimings();  // Load timings and dates for the default or selected cinema
+            }
+        });
+    </script>
+    
+</head>
+<body>
+    <div class="admin-container">
+        <h2>Select Movie and Cinema</h2>
+        <form action="{{ url_for('add_movie_to_cinema') }}" method="POST">
+            <label for="movie">Movie Name:</label>
+            <select name="movie" id="movie">
+                {% for movie in movie_names %}
+                <option value="{{ movie[0] }}">{{ movie[0] }}</option>
+                {% endfor %}
+            </select><br><br>
+            <label for="cinema">Cinema Name:</label>
+            <select name="cinema" id="cinema">
+                {% for cinema in cinema_names %}
+                <option value="{{ cinema[0] }}">{{ cinema[0] }}</option>
+                {% endfor %}
+            </select><br><br>
+            <label for="date">Date:</label>
+            <select name="date" id="date">
+                <!-- Date options will be loaded dynamically -->
+            </select><br><br>
+            <label for="timing">Timing:</label>
+            <select name="timing" id="timing">
+                <!-- Timing options will be loaded dynamically -->
+            </select><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

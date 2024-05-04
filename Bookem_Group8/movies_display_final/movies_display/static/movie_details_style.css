@@ -1,0 +1,176 @@
+/* General body styling */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    line-height: 1.6;
+}
+
+
+/* Styling for the main container to center it on the page */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Grid layout for the movie header section */
+.movie-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 20px;
+}
+
+/* Styling for the movie poster */
+.movie-poster {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+}
+
+/* Flexbox for arranging movie info elements */
+.movie-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Title styling */
+.movie-info h1 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 2.5rem;
+}
+
+/* Tagline styling */
+.tagline {
+    font-style: italic;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+/* Styling for the rating section with the score and votes */
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rating .score,
+.rating .votes {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Details like language, genre, age limit, and release date */
+.details,
+.release-date {
+    font-size: 1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+/* Button group styling */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Button styling for trailers and booking */
+.trailer-button, .book-button {
+    padding: 5px 10px;
+    font-size: 0.8rem; /* Smaller font size for buttons */
+    cursor: pointer; /* Add cursor pointer to make it obvious it's clickable */
+    border: none; /* Remove borders from buttons */
+    background-color: #333; /* Default background */
+    color: white; /* Text color */
+}
+
+.star {
+    cursor: pointer;
+    color: #ccc; /* Default color for unrated stars */
+}
+
+.star.rated {
+    color: gold; /* Color for rated stars */
+}
+
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse; /* Add this line to reverse the order of the stars */
+    justify-content: flex-end; /* Align stars to the right */
+    margin-top: 5px; /* Position under the buttons */
+    font-size: 40px; /* Larger stars */
+}
+
+
+.star:hover,
+.star:hover ~ .star {
+    color: #f0ad4e;
+}
+
+/* Hover effect for buttons */
+.trailer-button:hover,
+.book-button:hover {
+    background-color: #0056b3; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* Styling for the movie description section */
+.movie-description {
+    padding: 20px;
+}
+
+/* Footer styling */
+.info {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.info a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.info a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design adjustments for smaller screens */
+@media screen and (max-width: 768px) {
+    .movie-header {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-poster {
+        max-width: 200px;
+        margin: 0 auto 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .star-rating {
+        justify-content: center;
+    }
+}
+
+
+form {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}

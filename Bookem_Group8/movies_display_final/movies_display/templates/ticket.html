@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .ticket-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            text-align: center;
+            color: #333;
+        }
+
+        .ticket-info {
+            margin-bottom: 20px;
+        }
+
+        .ticket-info strong {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .ticket-info p {
+            margin: 5px 0;
+        }
+
+        .back-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <h1>Ticket Details</h1>
+        <div class="ticket-info">
+            <p><strong>Ticket ID:</strong> {{ ticket_info.TID }}</p>
+            <p><strong>Movie:</strong> {{ ticket_info.Movie }}</p>
+            <p><strong>Seat Number:</strong> {{ ticket_info.MSeatNum }}</p>
+            <p><strong>Cinema:</strong> {{ ticket_info.Cinema }}</p>
+            <p><strong>Time:</strong> {{ ticket_info.Time }}</p>
+            <p><strong>Date:</strong> {{ ticket_info.Date }}</p>
+            <p><strong>Price:</strong> {{ TotalPrice }}</p>
+            <p><strong>Transaction Number:</strong> {{ ticket_info.TransactionNum }}</p>
+            <p><strong>Ticket Status:</strong> {{ ticket_info.TicketStatus }}</p>
+        </div>
+        <button class="back-button" onclick="goToMoviesPage()">Back to Movies</button>
+    </div>
+    <script>
+        function goToMoviesPage() {
+            window.location.href = '/movies';
+        }
+    </script>
+</body>
+</html>

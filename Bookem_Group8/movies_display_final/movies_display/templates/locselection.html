@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Cinema and Time</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+    // Helper function to format time identifiers from "time_1_18:30" to "18:30"
+    function formatTime(timeId) {
+        return timeId.split('_').pop();
+    }
+
+    // Helper function to format date identifiers from "date_1_2024-05-01" to "2024-05-01"
+    function formatDate(dateId) {
+        return dateId.split('_').pop();
+    }
+
+    // Document ready function to update text content for date and time
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.time-id').forEach(element => {
+            element.textContent = formatTime(element.textContent); // Update text content for each time
+        });
+        document.querySelectorAll('.date-option').forEach(option => {
+            option.textContent = formatDate(option.textContent); // Update text content for each date
+        });
+    });
+    </script>
+</head>
+<body>
+    <h1>Select Cinema and Showtime</h1>
+    <!-- Form to submit selected date -->
+    <form action="{{ url_for('movie_showtimes', mid=mid) }}" method="get">
+        <label for="date">Choose a date:</label>
+        <select name="date" id="date" onchange="this.form.submit()">
+            <option>Select Date</option>
+            {% for date in available_dates %}
+            <option value="{{ date[0] }}" {% if selected_date == date[0] %} selected {% endif %} class="date-option">{{ date[0] }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if cinemas %}
+    <div class="cinemas">
+        {% for cinema, times in cinemas.items() %}
+        <div class="cinema">
+            <h2>{{ cinema }}</h2>
+            <ul>
+                {% for time in times %}
+                <!-- Making times clickable, redirecting to the seat selection route with necessary parameters -->
+                <li><a href="{{ url_for('bkseats', cinema_id=cinema, time_id=time, date_id=selected_date, mid=mid) }}" class="time-id">{{ time }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>

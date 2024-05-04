@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Events</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">			 
+    <!-- Include datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .admin-container {
+            background-color: #fff;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        input[type="text"],
+        select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('arrow-down.png');
+            background-position: right 10px center;
+            background-repeat: no-repeat;
+            background-size: 12px;
+            padding-right: 30px;
+            cursor: pointer;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .history-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 20px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .history-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h2>Add Events</h2>
+        <form id="event-form" method="POST" action="{{ url_for('event_creator_page') }}">
+            <label for="Mproduction">Movie production:</label>
+            <input type="text" id="Mproduction" name="Mproduction" placeholder="Movie production">
+            <label for="releasedate">Movie release date:</label>
+            <input type="text" id="releasedate" name="releasedate" placeholder="YYYY-MM-DD" autocomplete="off" data-toggle="datepicker">
+            <label for="enddate">Movie end date:</label>
+            <input type="text" id="enddate" name="enddate" placeholder="YYYY-MM-DD" autocomplete="off" data-toggle="datepicker">
+            <label for="Moviename">Movie name:</label>
+            <input type="text" id="Moviename" name="Moviename" placeholder="Movie name">
+            <label for="magelimit">Movie age limit:</label>
+            <input type="text" id="magelimit" name="magelimit" placeholder="Age limit">
+            <label for="mduration">Movie duration:</label>
+            <input type="text" id="mduration" name="mduration" placeholder="Duration">
+            <label for="Moviedescp">Movie description:</label>
+            <input type="text" id="Moviedescp" name="Moviedescp" placeholder="Description">
+            <!-- Hidden input field for movie rating -->
+            <input type="hidden" id="mrating" name="mrating" value="0">
+            <label for="mprice">Movie price:</label>
+            <input type="text" id="mprice" name="mprice" placeholder="Price">
+            <label for="moviegenre">Movie genre:</label>
+            <select id="moviegenre" name="moviegenre">
+                <option value="">Select movie genre</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Romance">Romance</option>
+                <option value="Action">Action</option>
+                <option value="Drama">Drama</option>
+                <option value="Rom-com">Rom-com</option>
+                <!-- Add more genres as needed -->
+            </select>
+            <label for="MURL">Movie URL:</label>
+            <input type="text" id="MURL" name="MURL" placeholder="Movie URL">
+            <label for="TCODE">Trailer URL:</label>
+            <input type="text" id="TCODE" name="TCODE" placeholder="Trailer URL">
+            <label for="mlanguage">Movie language:</label>
+            <input type="text" id="mlanguage" name="mlanguage" placeholder="Movie language">
+            <label for="mformat">Movie format:</label>
+            <input type="text" id="mformat" name="mformat" placeholder="Movie format">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <!-- Include datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
+    <!-- Initialize datepickers -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var datepickers = document.querySelectorAll('[data-toggle="datepicker"]');
+            for (var i = 0; i < datepickers.length; i++) {
+                new Datepicker(datepickers[i]);
+            }
+        });
+    </script>
+    <!-- Button to navigate to event_creator_his page -->
+    <div class="admin-container">
+        <a href="{{ url_for('event_creator_his') }}" class="addMovie">View Event History</a>
+        <br><br>
+        <a href="{{ url_for('add_movie_to_cinema') }}"><button id="addMovie">Add Movie to Cinema</button></a>
+        <br><br>
+        <b><a href="{{ url_for('logout') }}">Logout</a></b>
+    </div>
+</body>
+</html>

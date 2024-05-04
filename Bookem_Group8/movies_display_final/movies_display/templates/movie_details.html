@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book'em</title>
+    <link rel="icon" href="{{ url_for('static', filename='logof.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='movie_details_style.css') }}">
+</head>
+<body>
+
+    <form>
+        {% if session.loggedin %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </form>
+
+<div class="container">
+
+    <main>
+        <section class="movie-header">
+            <img src="{{ movie['URL'] }}" alt="{{ movie['Name'] }} Poster" class="movie-poster">
+            <div class="movie-info">
+                <h1>{{ movie['Name'] }}</h1>
+                <p class="tagline">{{ movie['Tagline'] }}</p>
+                <div class="details">
+                    <p>Language: {{ movie['Mlanguage'] }} | Duration: {{ movie['Duration'] }} | Genre: {{ movie['Genre'] }} | Age Limit: {{ movie['AgeLimit']}} | Format: {{movie['Mformat'] }}</p>
+                    <p>Release Date: {{ movie['ReleaseDate'].strftime('%B %d, %Y') }}</p>
+                </div>
+                <div class="rating">
+                    <span class="score">{{ movie['UserRating'] }}/5</span>
+                    {% if session.loggedin %}
+                    <div class="button-group">
+                        <a href="{{ url_for('movie_showtimes', mid=movie['MID']) }}">Book Tickets</a>
+                    </div>
+                    <div class="star-rating">
+                        <span class="star" data-value="1">&#9733;</span>
+                        <span class="star" data-value="2">&#9733;</span>
+                        <span class="star" data-value="3">&#9733;</span>
+                        <span class="star" data-value="4">&#9733;</span>
+                        <span class="star" data-value="5">&#9733;</span>
+                    </div>
+                    {% else %}
+                    <div class="button-group">
+                        <button onclick="loginAlert()">Book Tickets</button>
+                    </div>
+                    <div class="star-rating">
+                        <span onclick="loginAlert()">&#9733;</span>
+                        <span onclick="loginAlert()">&#9733;</span>
+                        <span onclick="loginAlert()">&#9733;</span>
+                        <span onclick="loginAlert()">&#9733;</span>
+                        <span onclick="loginAlert()">&#9733;</span>
+                    </div>
+                    {% endif %}
+                </div>
+             </div>
+        </section>
+
+        <!-- Trailer Modal -->
+        <div id="trailerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <!-- The embedded YouTube trailer -->
+                <iframe id="trailerVideo" width="560" height="315" src="https://www.youtube.com/embed/{{ movie['TCODE'] }}" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+
+
+        <section class="movie-description">
+            <h2>About the Movie</h2>
+            <p>
+                {{ movie['Description'] }}
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="info">
+            <h3>About Us</h3>
+            <p>Countries</p>
+            <pre>
+            <a href=" ">Inida</a> |<a href=" ">UK</a> |<a href=" ">USA</a> |<a href=" ">China</a></pre>
+            <p>Help</p>
+            <pre>
+            <a href=" ">About Us</a> |<a href=" ">Contact Us</a> |<a href=" ">Sitemap</a> |<a href=" ">FAQs</a></pre>
+            <p>Book'em Exculsives</p>
+            <pre>
+            <a href=" ">Superstar</a> |<a href=" ">Gidt Cards</a> |<a href=" ">offers</a> |<a href=" ">Trailers</a></pre>
+        </div>
+    </footer>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById('trailerModal');
+
+// Get the button that opens the modal
+var btn = document.querySelector('.trailer-button');
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+    // Stop the video when the modal is closed
+    var trailerVideo = document.getElementById('trailerVideo');
+    trailerVideo.src = trailerVideo.src;
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        // Stop the video when the modal is closed
+        var trailerVideo = document.getElementById('trailerVideo');
+        trailerVideo.src = trailerVideo.src;
+    }
+}
+</script>
+
+
+
+<script>
+var stars = document.querySelectorAll('.star-rating .star');
+var movie_id = "{{ movie['MID'] }}";
+var client_id = "{{ session['id'] }}" || null;
+
+stars.forEach(function(star, index) {
+    star.addEventListener('click', function() {
+        stars.forEach(function(s) {
+            s.classList.remove('rated');
+        });
+        for (var i = stars.length - 1; i >= index; i--) {
+            stars[i].classList.add('rated');
+        }
+        var rating = stars.length - index;
+        console.log('Rated as: ' + rating);  // Debugging log
+        // Optionally update server with new rating
+        fetch('/rate_movie', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({cid: client_id, mid: movie_id, rating: rating})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Rating updated successfully:', data.new_avg);
+                document.querySelector('.score').textContent = data.new_avg + '/5';
+            } else {
+                console.error('Error updating rating:', data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+    function loginAlert() {
+        alert("Please log in to perform this action!");
+    }
+
+
+
+</script>
+
+
+</body>
+</html>

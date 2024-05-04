@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Process</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='payment.css') }}">
+</head>
+<body>
+<div class="row">
+    <div class="col-75">
+        <div class="container">
+            <!-- Display Event Info -->
+            <h3>Event Details</h3>
+            <!-- Display relevant event information here based on the selected items -->
+            <div>
+                {% for item in selected_items %}
+                    <p><strong>{{ item['MID'] }}</strong> - {{ item['MSeatNum'] }} - {{ item['CinemaID'] }} - {{ item['TimeID'] }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Payment Form -->
+            <form action="/process_payment" method="post">
+                <!-- Billing Address -->
+                <div class="row">
+                    <div class="col-50">
+                        <h3>Billing Address</h3>
+                        <!-- Billing address fields here -->
+                        <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                        <input type="text" id="fname" name="firstname" placeholder="John M. Doe" required>
+                        <!-- Add more billing address fields as needed -->
+                    </div>
+
+                    <!-- Payment Details -->
+                    <div class="col-50">
+                        <h3>Payment</h3>
+                        <!-- Payment details fields here -->
+                        <label for="cname">Name on Card</label>
+                        <input type="text" id="cname" name="cardname" placeholder="John More Doe" required>
+                        <!-- Add more payment details fields as needed -->
+                    </div>
+                </div>
+
+                <!-- Checkbox for Shipping Address (optional) -->
+                <label>
+                    <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
+                </label>
+
+                <!-- Submit Button -->
+                <input type="submit" value="Continue to checkout" class="btn">
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Section -->
+    <div class="col-25">
+        <div class="container">
+            <h4>Cart</h4>
+            <!-- Update cart section to display selected items dynamically -->
+            <div>
+                <p><strong>Movie ID</strong> - Seat Number - Cinema ID - Time ID</p>
+                {% for item in selected_items %}
+                    <p>{{ item['MID'] }} - {{ item['MSeatNum'] }} - {{ item['CinemaID'] }} - {{ item['TimeID'] }}</p>
+                {% endfor %}
+            </div>
+            <!-- Display total amount here if needed -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

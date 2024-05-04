@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Show Times to Cinema</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="admin-container">
+        <h2>Add seat numbers and show times to cinema</h2>
+        <form id="signup-form" method="POST" action="{{ url_for('cinemadetails') }}">
+            <label for="Cinemaname">Cinema Name:</label>
+            <input type="text" id="Cinemaname" name="Cinemaname" placeholder="Enter cinema name" value="{{ cinema_name }}" readonly required>
+            <!-- <br><br>
+            <label for="seatnumber">Total Seats:</label>
+            <input type="number" id="seatnumber" name="seatnumber" placeholder="Enter total seats" min="1" max="{{ cinema_capacity }}" required> -->
+            <!-- <br><br>
+            <label for="SeatStatus">Seat Status:</label>
+            <input type="text" id="SeatStatus" name="SeatStatus" placeholder="Enter seat status" value="empty" required> -->
+            <br><br>
+
+            <!-- Date and time inputs for multiple entries -->
+            <div id="datetime-entries">
+                <label for="date1">Date 1:</label>
+                <input type="date" id="date1" name="dates[]" required>
+                <input type="time" id="time1" name="times[]" required>
+                <br><br>
+            </div>
+            <button type="button" onclick="addDateTimeInput()">Add More Date-Time</button>
+            <br><br>
+            <button type="submit">Submit</button>
+
+        </form>
+        <br>
+        <!-- Back button to cinema creation page -->
+        <button onclick="window.location.href='{{ url_for('cinema_create') }}'">Back to Cinema Creation</button>
+        <br><br>
+        <p id="error-message" class="error-message"></p>
+        <b><a href="{{ url_for('logout') }}">Logout</a></b>
+    </div>
+
+    <script>
+        let count = 2;
+        function addDateTimeInput() {
+            let container = document.getElementById('datetime-entries');
+            let html = `<label for="date${count}">Date ${count}:</label>` +
+                       `<input type="date" id="date${count}" name="dates[]" required>` +
+                       `<input type="time" id="time${count}" name="times[]" required><br><br>`;
+            container.insertAdjacentHTML('beforeend', html);
+            count++;
+        }
+    </script>
+</body>
+</html>

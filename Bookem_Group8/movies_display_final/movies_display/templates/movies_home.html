@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book'em Movies</title>
+    <link rel="icon" href="{{ url_for('static', filename='logof.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='filter.css') }}">
+</head>
+<body>
+
+<form onsubmit="event.preventDefault();">
+    <img src="{{ url_for('static', filename='logof.png') }}" height="40" width="150" alt="Book'em">
+    <label for="msearch">Search Movies:</label>
+    <input type="search" id="msearch" name="msearch" oninput="updateMovieDisplay()">
+    <input type="submit" value="Search">
+    {% if not session.get('loggedin', False) %}
+        <b><a href="{{ url_for('login') }}">Login</a></b>
+    {% else %}
+        <b><a href="{{ url_for('logout') }}">Logout</a></b>
+        <b><a href="{{ url_for('client_page') }}">Visit Profile</a></b>
+    {% endif %}
+</form>
+
+<div class="filters">
+    <h2>Filters</h2>
+    <div class="filter-section">
+        <h3>Genres</h3>
+        {% set seen_genres = set() %}
+        {% for movie in movies %}
+        {% if movie['Mgenre'] not in seen_genres %}
+        <button onclick="applyFilter('genre', '{{ movie['Mgenre'] }}')">{{ movie['Mgenre'] }}</button>
+        {% do seen_genres.add(movie['Mgenre']) %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="filter-section">
+        <h3>Languages</h3>
+        {% set seen_languages = set() %}
+        {% for movie in movies %}
+        {% if movie['Mlanguage'] not in seen_languages %}
+        <button onclick="applyFilter('language', '{{ movie['Mlanguage'] }}')">{{ movie['Mlanguage'] }}</button>
+        {% do seen_languages.add(movie['Mlanguage']) %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="filter-section">
+        <h3>Formats</h3>
+        {% set seen_formats = set() %}
+        {% for movie in movies %}
+        {% if movie['Mformat'] not in seen_formats %}
+        <button onclick="applyFilter('format', '{{ movie['Mformat'] }}')">{{ movie['Mformat'] }}</button>
+        {% do seen_formats.add(movie['Mformat']) %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    <button onclick="clearFilters()">Clear Filters</button>
+</div>
+
+<h2>Movies Around You</h2>
+<div class="movie-list">
+    {% for movie in movies %}
+    <a href="{{ url_for('movie_details', mid=movie['MID']) }}" class="movie-link">
+        <div class="movie-item" data-genre="{{ movie['Mgenre'] }}" data-language="{{ movie['Mlanguage'] }}" data-format="{{ movie['Mformat'] }}">
+            <img src="{{ movie['MURL'] }}" alt="{{ movie['Mname'] }}" class="movie-poster">
+            <h3>{{ movie['Mname'] }}</h3>
+            <p>Genre: {{ movie['Mgenre'] }}</p>
+            <p>Language: {{ movie['Mlanguage'] }}</p>
+            <p>Format: {{ movie['Mformat'] }}</p>
+            <p>Rating: {{ movie['Mrating'] }}/10</p>
+            <p>Price: ${{ '%.2f' | format(movie['Mprice']) }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<h2>Top Rated Movies</h2>
+    <div class="movie-list">
+    {% for movie in popular_movies %}
+    <a href="{{ url_for('movie_details', mid=movie['MID']) }}" class="movie-link">
+        <div class="movie-item" data-genre="{{ movie['Mgenre'] }}" data-language="{{ movie['Mlanguage'] }}" data-format="{{ movie['Mformat'] }}">
+            <img src="{{ movie['MURL'] }}" alt="{{ movie['Mname'] }}" class="movie-poster">
+            <h3>{{ movie['Mname'] }}</h3>
+            <p>Genre: {{ movie['Mgenre'] }}</p>
+            <p>Language: {{ movie['Mlanguage'] }}</p>
+            <p>Format: {{ movie['Mformat'] }}</p>
+            <p>Rating: {{ movie['Mrating'] }}/10</p>
+            <p>Price: ${{ '%.2f' | format(movie['Mprice']) }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+
+{% if recommended_movies %}
+<h2>User Recommended Movies</h2>
+<div class="movie-list">
+    {% for movie in recommended_movies %}
+    <a href="{{ url_for('movie_details', mid=movie['MID']) }}" class="movie-link">
+        <div class="movie-item" data-genre="{{ movie['Mgenre'] }}" data-language="{{ movie['Mlanguage'] }}" data-format="{{ movie['Mformat'] }}">
+            <img src="{{ movie['MURL'] }}" alt="{{ movie['Mname'] }}" class="movie-poster">
+            <h3>{{ movie['Mname'] }}</h3>
+            <p>Genre: {{ movie['Mgenre'] }}</p>
+            <p>Language: {{ movie['Mlanguage'] }}</p>
+            <p>Format: {{ movie['Mformat'] }}</p>
+            <p>Rating: {{ movie['Mrating'] }}/10</p>
+            <p>Price: ${{ '%.2f' | format(movie['Mprice']) }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h2>Currently Playing Movies</h2>
+<div class="movie-list">
+    {% for movie in currently_playing_movies %}
+    <a href="{{ url_for('movie_details', mid=movie['MID']) }}" class="movie-link">
+        <div class="movie-item" data-genre="{{ movie['Mgenre'] }}" data-language="{{ movie['Mlanguage'] }}" data-format="{{ movie['Mformat'] }}">
+            <img src="{{ movie['MURL'] }}" alt="{{ movie['Mname'] }}" class="movie-poster">
+            <h3>{{ movie['Mname'] }}</h3>
+            <p>Genre: {{ movie['Mgenre'] }}</p>
+            <p>Language: {{ movie['Mlanguage'] }}</p>
+            <p>Format: {{ movie['Mformat'] }}</p>
+            <p>Rating: {{ movie['Mrating'] }}/10</p>
+            <p>Price: ${{ '%.2f' | format(movie['Mprice']) }}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<h2>Upcoming Movies</h2>
+<div class="movie-list">
+    {% for movie in upcoming_movies %}
+    <a href="{{ url_for('movie_details', mid=movie['MID']) }}" class="movie-link">
+        <div class="movie-item" data-genre="{{ movie['Mgenre'] }}" data-language="{{ movie['Mlanguage'] }}" data-format="{{ movie['Mformat'] }}">
+            <img src="{{ movie['MURL'] }}" alt="{{ movie['Mname'] }}" class="movie-poster">
+            <h3>{{ movie['Mname'] }}</h3>
+            <p>Genre: {{ movie['Mgenre'] }}</p>
+            <p>Language: {{ movie['Mlanguage'] }}</p>
+            <p>Format: {{ movie['Mformat'] }}</p>
+            <p>Rating: {{ movie['Mrating'] }}/10</p>
+            <p>Price: ${{ '%.2f' | format(movie['Mprice']) }}</p>
+        </div>
+    </a>
+    {% endfor %}
+
+
+
+</div>
+
+
+
+<footer>
+        <div class="info">
+            <h3>About Us</h3>
+            <p>Countries</p>
+            <pre>
+            <a href=" ">Inida</a> |<a href=" ">UK</a> |<a href=" ">USA</a> |<a href=" ">China</a></pre>
+            <p>Help</p>
+            <pre>
+            <a href=" ">About Us</a> |<a href=" ">Contact Us</a> |<a href=" ">Sitemap</a> |<a href=" ">FAQs</a></pre>
+            <p>Book'em Exculsives</p>
+            <pre>
+            <a href=" ">Superstar</a> |<a href=" ">Gidt Cards</a> |<a href=" ">offers</a> |<a href=" ">Trailers</a></pre>
+            <p>Register as Event Creator</p>
+            <pre>
+            <a href="{{url_for('event_creator_page')}}">Create Event</a></pre>
+
+        </div>
+</footer>
+
+
+<script>
+let filters = {
+  genre: null,
+  language: null,
+  format: null
+};
+
+function applyFilter(filterType, selectedValue) {
+  filters[filterType] = selectedValue;
+  updateMovieDisplay();
+}
+
+function clearFilters() {
+  filters = { genre: null, language: null, format: null };
+  updateMovieDisplay();
+}
+
+function updateMovieDisplay() {
+  const movies = document.querySelectorAll('.movie-item');
+  movies.forEach(movie => {
+    let isDisplay = true;
+    // Check each filter
+    for (let filterType in filters) {
+      let filterValue = filters[filterType];
+      let movieAttributeValue = movie.dataset[filterType];
+      if (filterValue && movieAttributeValue !== filterValue) {
+        isDisplay = false;
+        break;
+      }
+    }
+    movie.style.display = isDisplay ? 'block' : 'none';
+  });
+}
+
+// Initialize movie display
+document.addEventListener('DOMContentLoaded', updateMovieDisplay);
+</script>
+
+
+
+
+
+</body>
+</html>

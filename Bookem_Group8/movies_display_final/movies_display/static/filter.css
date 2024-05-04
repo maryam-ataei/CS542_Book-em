@@ -1,0 +1,245 @@
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #fff;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+form {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+form input[type="search"] {
+  padding: 10px;
+  width: 300px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+}
+
+form input[type="submit"] {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.filters {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.filter-section {
+  margin: 10px;
+}
+
+.filter-section h3 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px; /* Space between buttons */
+  margin-bottom: 10px; /* Space between button rows */
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:focus,
+button.active {
+  background-color: #0056b3; /* Darker shade for active state */
+  color: white;
+}
+
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+.movie-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust the min-width to your preference */
+  gap: 20px; /* This is the space between the grid items */
+  padding: 20px; /* Add some padding around the grid */
+  justify-content: center;
+  align-items: stretch; /* This will make sure that all grid items stretch to fill the row height */
+}
+
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align the items for a neater look */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 16px; /* Add padding inside the movie items */
+  overflow: hidden; /* Ensures no content spills out */
+}
+
+.movie-item img {
+  width: 100%; /* Full width of the container */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* This will cover the area, might crop a bit, depending on the aspect ratio */
+  aspect-ratio: 2 / 3; /* Common aspect ratio for movie posters */
+  margin-bottom: 8px; /* Space below the image */
+}
+
+/* Styling for the movie title, rating, and votes */
+.movie-item h3, .movie-item p {
+  width: 100%; /* Full width of the container */
+  text-align: center; /* Center-align the text */
+  margin: 4px 0; /* A bit of margin for spacing */
+}
+
+/* Optional: if titles vary in length and cause different heights, truncate with ellipsis */
+.movie-item h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.promoted-label {
+  background-color: #ff4500; /* Adjust this to the promoted label color in the image */
+  color: white;
+  padding: 2px 8px;
+  border-radius: 2px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.9em;
+}
+
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.info {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.info a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.info a:hover {
+  text-decoration: underline;
+}
+
+.hall{
+  margin-left: 130px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+#specloc{
+  background-color: White;
+  color: black;
+  padding: 14px 20px;
+  margin: auto;
+  cursor: pointer;
+  width: 200px;
+}
+
+#time{
+  background-color: White;
+  color: black;
+  padding: 14px 20px;
+  margin: auto;
+ border-style: solid;
+ border-width: thin;
+  cursor: pointer;
+  width: 100px;
+}
+
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .movie-item {
+    width: calc((100% / 2) - 20px); /* Two items per row on smaller screens */
+  }
+}
+
+/* Footer styling */
+.info {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.info a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.info a:hover {
+    text-decoration: underline;
+}

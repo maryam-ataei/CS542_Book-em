@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...other head elements... -->
+</head>
+<body>
+    <div class="container">
+        <h1>Confirm Transaction</h1>
+        <h2>Payment Information:</h2>
+        <p><strong>Total Price:</strong> {{ total_price }}</p>
+        <p><strong>Card Name:</strong> {{ payment_info.pay_card_name }}</p>
+        <p><strong>Card Number:</strong> {{ payment_info.pay_card_number }}</p>
+        <p><strong>Expiration Date:</strong> {{ payment_info.pay_exp_month }}/{{ payment_info.pay_exp_year }}</p>
+        <p><strong>CVV:</strong> {{ payment_info.cvv }}</p>
+        <h2>Selected Movie Information:</h2>
+        <p><strong>Movie Name:</strong> {{ payment_info.movie_name }}</p>
+        <p><strong>Cinema Name:</strong> {{ payment_info.movie_cinema }}</p>
+        <p><strong>Movie Date:</strong> {{ payment_info.movie_date }}</p>
+        <p><strong>Movie Time:</strong> {{ payment_info.movie_time }}</p>
+        <p><strong>Seat Number:</strong> {{ payment_info.movie_seat }}</p>
+        <form action="/confirm_transaction" method="POST">
+            <input type="hidden" name="transaction_id" value="{{ payment_info.transaction_num }}">
+            <button type="submit">Confirm Transaction</button>
+        </form>
+    </div>
+</body>
+</html>

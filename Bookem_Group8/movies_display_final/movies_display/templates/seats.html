@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a seat</title>
+    <link rel="icon" href="logof.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='seat.css') }}">
+</head>
+<body>
+<div class="movie-container">
+    <h2>{{ movie_info[0][0] if movie_info else 'Movie Title' }}</h2>
+    <h3>Price: $<span id="movie_price">{{ movie_info[0][1] if movie_info else '10' }}</span></h3>
+    <ul class="showcase">
+        <li><div class="seat"></div><small>Empty</small></li>
+        <li><div class="seat selected"></div><small>Selected</small></li>
+        <li><div class="seat occupied"></div><small>Occupied</small></li>
+    </ul>
+
+    <div class="container">
+        {% set seats_per_row = 10 %}
+        {% set row_number = (movie_info|length / seats_per_row) if movie_info else 0 %}
+
+        {% for row in range(row_number|int) %}
+        <div class="row">
+            {% for seat in movie_info[row * seats_per_row : (row + 1) * seats_per_row] %}
+            <div class="seat {{ 'occupied' if seat[3] == 'Occupied' else '' }}" data-seat-num="{{ seat[2] }}">
+                {% if seat[3] == 'Empty' %}
+                <input type="checkbox" class="seat-checkbox">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <p class="text">You have selected <span id="count">0</span> seats for a total price of $<span id="total">0</span></p>
+    <button onclick="processCheckout()">Proceed to Payment</button>
+</div>
+
+<script>
+    document.querySelectorAll('.seat:not(.occupied)').forEach(seat => {
+        seat.addEventListener('click', () => {
+            seat.classList.toggle('selected');
+            updateSelectedCount();
+        });
+    });
+
+    function updateSelectedCount() {
+        const selectedSeats = document.querySelectorAll('.row .seat.selected');
+        const selectedSeatsCount = selectedSeats.length;
+        const moviePrice = parseFloat(document.getElementById('movie_price').textContent);
+        document.getElementById('count').textContent = selectedSeatsCount;
+        document.getElementById('total').textContent = (selectedSeatsCount * moviePrice).toFixed(2);
+    }
+
+    function processCheckout() {
+        const selectedSeats = [...document.querySelectorAll('.row .seat.selected')].map(seat => seat.dataset.seatNum);
+        const totalPrice = parseFloat(document.getElementById('total').textContent);
+        const data = {
+            selectedSeats: selectedSeats,
+            totalPrice: totalPrice,
+            cinema_id: '{{ cinema_id }}',
+            time_id: '{{ time_id }}',
+            date_id: '{{ date_id }}',
+            mid: '{{ mid }}'
+        };
+        fetch('{{ url_for("bkseats") }}', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(response => response.ok ? window.location.href = '{{ url_for("payment") }}' : alert('Checkout failed'))
+          .catch(error => console.error('Error during checkout:', error));
+    }
+</script>
+</body>
+</html>
