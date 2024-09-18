@@ -1,10 +1,10 @@
-#Book ‘em - Movie Ticket Booking System
+# Book ‘em - Movie Ticket Booking System
 
-##Abstract
+## Abstract
 
 "Book ‘em" is a modern, web-based Movie Ticket Booking System aimed at enhancing the experience of purchasing movie tickets across various cinemas. This system simplifies the process of movie selection, seat booking, and payment, providing a seamless user experience for moviegoers. By leveraging HTML, CSS, and JavaScript for the front-end, with Python and Flask managing the backend, integrated with an Oracle database, the system ensures a robust and responsive user interface.
 
-##Features
+## Features
 
 - **Movie Discovery**: Easily find upcoming movies in a specific city or by name.
 - **User Accounts**: Register and manage user profiles with distinct permissions for admins and general users.
