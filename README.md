@@ -13,7 +13,7 @@
 
 ##Technologies Used
 
-- **Frontend**: HTML, CSS, JavaScript
+- **Frontend**: HTML, CSS
 - **Backend**: Python (Flask)
 - **Database**: Oracle for managing movie schedules, bookings, user registrations, and transactions.
 
